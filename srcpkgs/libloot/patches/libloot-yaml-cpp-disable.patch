@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bf76c37..c11fce0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -176,18 +176,15 @@ set(YAML_BUILD_SHARED_LIBS OFF)
+ set(YAML_CPP_BUILD_TESTS OFF)
+ # Suppress additional targets added by CTest, which is pulled in by yaml-cpp.
+ set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+-FetchContent_Declare(
+-    yaml-cpp
+-    URL "https://github.com/loot/yaml-cpp/archive/0.8.0+merge-key-support.2.tar.gz"
+-    URL_HASH "SHA256=e91779044cd4025ec10ed31986031031ef22ebce90a64cc8f85e7c7e95a1abc6"
+-    FIND_PACKAGE_ARGS)
++
++add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
+ 
+ # Set BUILD_SHARED_LIBS=OFF to prevent fmt and spdlog from being built as shared
+ # libraries.
+ set(LIBLOOT_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+ set(BUILD_SHARED_LIBS OFF)
+ 
+-FetchContent_MakeAvailable(fmt spdlog yaml-cpp)
++FetchContent_MakeAvailable(fmt spdlog)
+ 
+ # Restore the original value of BUILD_SHARED_LIBS.
+ set(BUILD_SHARED_LIBS ${LIBLOOT_BUILD_SHARED_LIBS})

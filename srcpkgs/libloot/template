@@ -1,0 +1,26 @@
+# Template file for 'libloot'
+pkgname=libloot
+_loot_yaml_cpp_tag="0.8.0+merge-key-support.2"
+version=0.25.5
+revision=1
+build_style=cmake
+configure_args="-DLIBLOOT_BUILD_TESTS=OFF"
+hostmakedepends=""
+makedepends="boost-devel icu-devel tbb-devel fmt-devel spdlog"
+depends=""
+short_desc="A library for the Load Order Optimisation Tool for Starfield,
+	The Elder Scrolls (Morrowind and later) and Fallout (3 and later) games."
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-3.0-only"
+homepage="https://github.com/loot/libloot"
+distfiles="https://github.com/loot/libloot/archive/${version}.tar.gz
+	https://github.com/loot/yaml-cpp/archive/${_loot_yaml_cpp_tag}.tar.gz>loot-yaml-cpp.tar.gz"
+checksum="7ebd54805d1d03b2fe176a23ed928b85502816892de361c6493abe39acb8924c
+	e91779044cd4025ec10ed31986031031ef22ebce90a64cc8f85e7c7e95a1abc6"
+skip_extraction="loot-yaml-cpp.tar.gz"
+
+post_extract() {
+	vsrcextract -C yaml-cpp loot-yaml-cpp.tar.gz
+}
+
+

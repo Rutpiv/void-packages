@@ -1,0 +1,28 @@
+# Template file for 'cpr'
+pkgname=cpr
+version=1.11.2
+revision=1
+build_style=cmake
+configure_args="-DCPR_USE_SYSTEM_CURL=ON -DBUILD_SHARED_LIBS=ON"
+makedepends="openssl-devel libcurl-devel"
+short_desc="C++ Requests: Curl for People, a spiritual port of Python Requests."
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="MIT"
+homepage="https://docs.libcpr.org/"
+distfiles="https://github.com/libcpr/cpr/archive/${version}.tar.gz"
+checksum=3795a3581109a9ba5e48fbb50f9efe3399a3ede22f2ab606b71059a615cd6084
+
+post_install() {
+	vlicense LICENSE
+}
+
+cpr-devel_package() {
+	short_desc+=" - development files"
+	depends="${sourcepkg}>=${version}_${revision} openssl-devel libcurl-devel"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove usr/include
+		vmove usr/lib/*.so
+	}
+}
+

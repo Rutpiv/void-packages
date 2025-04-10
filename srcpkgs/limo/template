@@ -1,0 +1,14 @@
+# Template file for 'limo'
+pkgname=limo
+version=1.1
+revision=1
+build_style=cmake
+hostmakedepends="pkg-config"
+makedepends="jsoncpp-devel libarchive-devel pugixml-devel cpr-devel qt5-devel qt5-svg-devel"
+depends=""
+short_desc="A simple Qt based mod manager"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-3.0-only"
+homepage="https://github.com/limo-app/limo"
+distfiles="https://github.com/limo-app/limo/archive/v${version}.tar.gz"
+checksum=05007668455f11ad323c7582ef846e242ab161004e388a9e91a75da574d1b6a9
