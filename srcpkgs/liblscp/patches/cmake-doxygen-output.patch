@@ -1,0 +1,28 @@
+From ab1aa8a472ed9c35c5496fde115157b1d8a73980 Mon Sep 17 00:00:00 2001
+From: Rutpiv <roger_freitas@live.com>
+Date: Fri, 26 Dec 2025 17:46:45 -0300
+Subject: [PATCH] cmake: add BUILD_DOCS option
+
+---
+ CMakeLists.txt | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 020696e..916f129 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -115,7 +115,11 @@ endif ()
+ # No additional packages or libraries...
+ #
+ 
++option(BUILD_DOCS "Build API documentation (Doxygen)" ON)
++
+ add_subdirectory (src)
+-add_subdirectory (doc)
++if (BUILD_DOCS)
++  add_subdirectory (doc)
++endif ()
+ add_subdirectory (examples)
+ 
+-- 
+2.51.2
