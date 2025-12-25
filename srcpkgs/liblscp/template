@@ -1,0 +1,30 @@
+# Template file for 'liblscp'
+pkgname=liblscp
+version=1.0.1
+revision=1
+build_style=cmake
+hostmakedepends="doxygen graphviz"
+short_desc="LinuxSampler Control Protocol API library"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="LGPL-2.1-or-later"
+homepage="https://qsampler.sourceforge.io"
+distfiles="https://github.com/rncbc/liblscp/archive/v${version}.tar.gz"
+checksum=1a86e9071fa87436904e67da6d68cec6df895a2a2509703cceae12c2d8ccdc15
+make_check=no # No tests available.
+
+liblscp-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove "usr/lib/*.so"
+		vmove usr/lib/pkgconfig
+	}
+}
+
+liblscp-doc_package() {
+	short_desc+=" - documentation"
+	pkg_install() {
+		vmove usr/share/doc
+	}
+}
