@@ -1,0 +1,41 @@
+Install package libs in the global libdir instead of a private
+$libdir/libgig directory, so no ld.so.conf entry is required.
+Same approach as linuxsampler's install-pkglibdir-globally.patch.
+
+diff --git a/akai.pc.in b/akai.pc.in
+index 5b1d993..3a8cd17 100644
+--- a/akai.pc.in
++++ b/akai.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@libdir@/libgig
++libdir=@libdir@
+ includedir=@includedir@/libgig
+ 
+ Name: akai
+diff --git a/gig.pc.in b/gig.pc.in
+index d222298..13b7dbc 100644
+--- a/gig.pc.in
++++ b/gig.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@libdir@/libgig
++libdir=@libdir@
+ includedir=@includedir@/libgig
+ 
+ Name: gig
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 72de9fc..6bc6827 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,7 +1,7 @@
+ # to prevent compile errors on some systems
+ AM_CXXFLAGS = -pedantic -Wreturn-type
+ 
+-pkglib_LTLIBRARIES = libgig.la libakai.la
++lib_LTLIBRARIES = libgig.la libakai.la
+ 
+ libgigincludedir = $(includedir)/libgig
+ libgiginclude_HEADERS = RIFF.h DLS.h SF.h gig.h Korg.h Serialization.h sysdef.h

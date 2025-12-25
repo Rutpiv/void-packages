@@ -4613,3 +4613,5 @@ libcpptrace.so.1 cpptrace-1.0.4_1
 libcgif.so.0 cgif-0.5.3_1
 libdsk.so.5 libdsk-1.5.22_1
 liblscp.so.6 liblscp-1.0.1_1
+libgig.so.13 libgig-4.5.2_1
+libakai.so.0 libgig-4.5.2_1
