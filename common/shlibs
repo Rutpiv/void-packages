@@ -4571,3 +4571,5 @@ libgpiod.so.3 libgpiod-2.2_4
 libgpiodcxx.so.2 libgpiod-2.2_4
 libigloo.so.0 libigloo-0.9.5_1
 liblscp.so.6 liblscp-1.0.1_1
+libgig.so.13 libgig-4.5.2_1
+libakai.so.0 libgig-4.5.2_1
