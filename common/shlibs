@@ -4573,3 +4573,5 @@ libresvg.so.0.46 libresvg0-0.46.0_1
 libgpiod.so.3 libgpiod-2.2_4
 libgpiodcxx.so.2 libgpiod-2.2_4
 liblscp.so.6 liblscp-1.0.1_1
+libgig.so.13 libgig-4.5.2_1
+libakai.so.0 libgig-4.5.2_1
