@@ -1,0 +1,49 @@
+From 74638d71a8a2c4c25b1733c3bdc3eeab3ee2d0d1 Mon Sep 17 00:00:00 2001
+From: Roger Freitas Pereira <roger_freitas@live.com>
+Date: Tue, 30 Dec 2025 03:00:26 -0300
+Subject: [PATCH] doc: avoid running doxygen twice
+
+---
+ doc/CMakeLists.txt | 27 ++++++++++++++++++++++-----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index dadfb47..c32014c 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -4,10 +4,27 @@ find_package (Doxygen)
+ 
+ if (DOXYGEN_FOUND)
+   set (top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}/..")
+-  configure_file (liblscp.doxygen.in liblscp.doxygen IMMEDIATE @ONLY)
+-  add_custom_target (doxygen ALL
++  configure_file (liblscp.doxygen.in liblscp.doxygen @ONLY)
++
++  set (DOXYGEN_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
++  set (DOXYGEN_INDEX "${DOXYGEN_HTML_DIR}/index.html")
++
++  add_custom_command(
++    OUTPUT "${DOXYGEN_INDEX}"
++    COMMAND "${CMAKE_COMMAND}" -E make_directory "${DOXYGEN_HTML_DIR}"
+     COMMAND ${DOXYGEN_EXECUTABLE} liblscp.doxygen
+-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+-  install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
+-    DESTINATION ${CMAKE_INSTALL_DOCDIR})
++    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
++    DEPENDS
++      ${CMAKE_CURRENT_SOURCE_DIR}/liblscp.doxygen.in
++      ${CMAKE_CURRENT_BINARY_DIR}/liblscp.doxygen
++    COMMENT "Running doxygen"
++    VERBATIM
++  )
++
++  add_custom_target(doxygen ALL DEPENDS ${DOXYGEN_INDEX})
++
++  install(
++    DIRECTORY ${DOXYGEN_HTML_DIR}/
++    DESTINATION ${CMAKE_INSTALL_DOCDIR}
++  )
+ endif ()
+-- 
+2.51.2
+
