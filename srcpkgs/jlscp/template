@@ -1,0 +1,36 @@
+# Template file for 'jlscp'
+pkgname=jlscp
+version=0.8
+revision=1
+hostmakedepends="openjdk17 apache-ant"
+depends="openjdk17-jre"
+short_desc="Java LinuxSampler Control Protocol API library"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-2.0-only"
+homepage="https://sourceforge.net/projects/jlscp/"
+distfiles="${SOURCEFORGE_SITE}/${pkgname}/${pkgname}-${version}.tar.bz2"
+checksum=5612c60c262c0604eb8741bc8064863e9f33babc0a1517c3fa3f44fd8a070799
+make_check=no # No tests available.
+
+do_build() {
+	. /etc/profile.d/apache-ant.sh
+	. /etc/profile.d/jdk.sh
+
+	ant build-lib
+	ant build-doc
+}
+
+do_install() {
+	vmkdir usr/share/java
+	vinstall lib/jlscp.jar 644 usr/share/java jlscp.jar
+
+	vmkdir usr/share/doc/jlscp
+	vcopy doc/api usr/share/doc/jlscp
+}
+
+jlscp-doc_package() {
+	short_desc+=" - documentation"
+	pkg_install() {
+		vmove usr/share/doc
+	}
+}
