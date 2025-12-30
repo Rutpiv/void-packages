@@ -1,0 +1,64 @@
+From 5f5a1b73104fab4e2c757020ee83be8e5f21cd72 Mon Sep 17 00:00:00 2001
+From: Roger Freitas Pereira <roger_freitas@live.com>
+Date: Sat, 10 Jan 2026 01:28:43 -0300
+Subject: [PATCH] linuxsampler: fix ARM atomic fallbacks
+
+---
+ src/common/atomic.h | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/src/common/atomic.h b/src/common/atomic.h
+index 6e3f24f..82df084 100644
+--- a/src/common/atomic.h
++++ b/src/common/atomic.h
+@@ -1212,7 +1212,8 @@ typedef struct { int counter; } atomic_t;
+  */
+ # define barrier()      asm volatile("dmb ish": : :"memory")
+ #else
+-# error No memory barrier macro defined for this ARM architecture!
++/* Generic fallback for unrecognized ARM variants: rely on compiler atomics */
++# define barrier() __atomic_thread_fence(__ATOMIC_SEQ_CST)
+ #endif
+ 
+ #define smp_mb()        barrier()
+@@ -1431,7 +1432,36 @@ static inline int atomic_cmpxchg(atomic_t *ptr, int old, int _new)
+ }
+ 
+ #else
+-# error Unknown ARM architecture !
++/* Generic fallback for unrecognized ARM variants: use GCC/Clang atomics */
++static inline void atomic_add(int i, atomic_t *v)
++{
++    __atomic_fetch_add(&v->counter, i, __ATOMIC_SEQ_CST);
++}
++
++static inline int atomic_add_return(int i, atomic_t *v)
++{
++    return __atomic_add_fetch(&v->counter, i, __ATOMIC_SEQ_CST);
++}
++
++static inline void atomic_sub(int i, atomic_t *v)
++{
++    __atomic_fetch_sub(&v->counter, i, __ATOMIC_SEQ_CST);
++}
++
++static inline int atomic_sub_return(int i, atomic_t *v)
++{
++    return __atomic_sub_fetch(&v->counter, i, __ATOMIC_SEQ_CST);
++}
++
++static inline int atomic_cmpxchg(atomic_t *ptr, int old, int _new)
++{
++    /* Return previous value (same convention as the asm variants here). */
++    (void)__atomic_compare_exchange_n(
++        &ptr->counter, &old, _new,
++        0, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST
++    );
++    return old;
++}
+ #endif /* ARM 32 bit vs. ARM 64 bit */
+ 
+ #define atomic_inc(v)           atomic_add(1, v)
+-- 
+2.51.2
+
