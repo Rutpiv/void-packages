@@ -1,0 +1,14 @@
+# Template file for 'linuxsampler'
+pkgname=linuxsampler
+version=2.4.2
+revision=1
+build_style=gnu-configure
+hostmakedepends="pkg-config flex perl perl-XML-Parser which"
+makedepends="alsa-lib-devel jack-devel libgig-devel libsndfile-devel"
+checkdepends="libcppunit-devel"
+short_desc="Professional-grade audio sampler"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-2.0-only AND custom:LinuxSampler-Non-Commercial"
+homepage="https://www.linuxsampler.org/"
+distfiles="https://download.linuxsampler.org/packages/${pkgname}-${version}.tar.bz2"
+checksum=b326d2bac18897ee97d2477863e16a57a87c0acdc9df4865bd969076c0bf510f
