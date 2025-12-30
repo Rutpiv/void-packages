@@ -1,0 +1,38 @@
+From cbdbef3a53b72fe048dfc4c1111cd859fef87df2 Mon Sep 17 00:00:00 2001
+From: Roger Freitas Pereira <roger_freitas@live.com>
+Date: Thu, 8 Jan 2026 00:04:30 -0300
+Subject: [PATCH] linuxsampler: install package libs in global libdir
+
+---
+ linuxsampler.pc.in | 2 +-
+ src/Makefile.am    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/linuxsampler.pc.in b/linuxsampler.pc.in
+index 8f0a229..dab68ce 100644
+--- a/linuxsampler.pc.in
++++ b/linuxsampler.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@libdir@/linuxsampler
++libdir=@libdir@
+ includedir=@includedir@
+ plugindir=@libdir@/linuxsampler/plugins
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index c28f4b3..1a7ba8a 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -38,7 +38,7 @@ SUBDIRS = scriptvm db network engines common testcases drivers \
+ liblinuxsamplerincludedir = $(includedir)/linuxsampler
+ liblinuxsamplerinclude_HEADERS = Sampler.h EventListeners.h
+ 
+-pkglib_LTLIBRARIES = liblinuxsampler.la
++lib_LTLIBRARIES = liblinuxsampler.la
+ liblinuxsampler_la_SOURCES = Sampler.cpp
+ liblinuxsampler_la_LIBADD = \
+ 	$(sqlite3_lib) \
+-- 
+2.51.2
+
