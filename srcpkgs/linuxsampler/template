@@ -1,0 +1,87 @@
+# Template file for 'linuxsampler'
+pkgname=linuxsampler
+version=2.4.2
+revision=1
+build_style=gnu-configure
+configure_args="--enable-static --enable-signed-triang-algo=intmath --enable-unsigned-triang-algo=intmath"
+hostmakedepends="autoconf automake libtool pkg-config doxygen flex perl perl-XML-Parser which"
+makedepends="alsa-lib-devel jack-devel libgig-devel libsndfile-devel lv2 dssi-devel ladspa-sdk"
+checkdepends="libcppunit-devel"
+short_desc="Professional-grade audio sampler"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-2.0-only AND custom:LinuxSampler-Non-Commercial"
+homepage="https://www.linuxsampler.org/"
+distfiles="https://download.linuxsampler.org/packages/${pkgname}-${version}.tar.bz2"
+checksum=b326d2bac18897ee97d2477863e16a57a87c0acdc9df4865bd969076c0bf510f
+disable_parallel_build=yes
+
+if [ "$XBPS_TARGET_MACHINE" != "x86_64" ]; then
+	make_check=no # tests are not portable
+fi
+
+# musl does not provide execinfo.h/backtrace() by default.
+if [ "$XBPS_TARGET_LIBC" = musl ]; then
+	makedepends+=" libexecinfo-devel"
+	export LIBS+=" -lexecinfo"
+fi
+
+pre_configure() {
+	autoreconf -fi
+
+	# configure uses AC_RUN_IFELSE to test UNIX98; this fails on cross builds
+	# and on musl, even though pthread_mutexattr_settype() is available.
+	if [ "$CROSS_BUILD" ] || [ "$XBPS_TARGET_LIBC" = musl ]; then
+		export HAVE_UNIX98=1
+	fi
+}
+
+post_build() {
+	make docs
+}
+
+post_install() {
+	vmkdir usr/share/doc/${pkgname}
+	vcopy doc/html usr/share/doc/${pkgname}
+
+	# Extract and install the custom LinuxSampler non-commercial exception
+	sed -n '11,15p' README > LinuxSampler-Non-Commercial.txt
+	vlicense LinuxSampler-Non-Commercial.txt
+
+	# remove useless static lib
+	rm -f "${DESTDIR}/usr/lib/dssi/linuxsampler.a"
+	rm -f "${DESTDIR}/usr/lib/lv2/linuxsampler.lv2/linuxsampler.a"
+}
+
+linuxsampler-devel_package() {
+	short_desc+=" - development files"
+	depends="${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove "usr/lib/*.a"
+		vmove "usr/lib/*.so"
+		vmove usr/lib/pkgconfig
+	}
+}
+
+linuxsampler-doc_package() {
+	short_desc+=" - documentation"
+	pkg_install() {
+		vmove usr/share/doc
+	}
+}
+
+linuxsampler-lv2_package() {
+	short_desc+=" - LV2 plugin"
+	depends="${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/lib/lv2
+	}
+}
+
+linuxsampler-dssi_package() {
+	short_desc+=" - DSSI plugin"
+	depends="${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/lib/dssi
+	}
+}

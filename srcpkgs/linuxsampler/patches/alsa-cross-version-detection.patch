@@ -1,0 +1,84 @@
+From 1664951613730b89a69847f2d49a06dd5d2ee93a Mon Sep 17 00:00:00 2001
+From: Roger Freitas Pereira <roger_freitas@live.com>
+Date: Wed, 7 Jan 2026 23:09:37 -0300
+Subject: [PATCH] linuxsampler: fix ALSA version detection for cross builds
+
+---
+ configure.ac | 58 +++++++++++++++++-----------------------------------
+ 1 file changed, 19 insertions(+), 39 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index a14ffd5..5b280a3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -330,48 +330,28 @@ if test "$config_alsa_driver" = "yes"; then
+ 
+     echo -n "checking Alsa version... "
+     AC_LANG_PUSH([C])
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
++
++    AC_COMPUTE_INT([alsa_major], [SND_LIB_MAJOR], [[
+         #include <alsa/asoundlib.h>
+-        int main(void) {
+-            /* ensure backward compatibility */
+-            #if !defined(SND_LIB_MAJOR) && defined(SOUNDLIB_VERSION_MAJOR)
+-            #define SND_LIB_MAJOR SOUNDLIB_VERSION_MAJOR
+-            #endif
+-            return SND_LIB_MAJOR;
+-        }
+-    ]])],
+-    alsa_major=0,
+-    alsa_major=$?,
+-    alsa_major=0
+-    )
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
++        #if !defined(SND_LIB_MAJOR) && defined(SOUNDLIB_VERSION_MAJOR)
++        #define SND_LIB_MAJOR SOUNDLIB_VERSION_MAJOR
++        #endif
++    ]], [alsa_major=0])
++
++    AC_COMPUTE_INT([alsa_minor], [SND_LIB_MINOR], [[
+         #include <alsa/asoundlib.h>
+-        int main(void) {
+-            /* ensure backward compatibility */
+-            #if !defined(SND_LIB_MINOR) && defined(SOUNDLIB_VERSION_MINOR)
+-            #define SND_LIB_MINOR SOUNDLIB_VERSION_MINOR
+-            #endif
+-            return SND_LIB_MINOR;
+-        }
+-    ]])],
+-    alsa_minor=0,
+-    alsa_minor=$?,
+-    alsa_minor=0
+-    )
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
++        #if !defined(SND_LIB_MINOR) && defined(SOUNDLIB_VERSION_MINOR)
++        #define SND_LIB_MINOR SOUNDLIB_VERSION_MINOR
++        #endif
++    ]], [alsa_minor=0])
++
++    AC_COMPUTE_INT([alsa_subminor], [SND_LIB_SUBMINOR], [[
+         #include <alsa/asoundlib.h>
+-        int main(void) {
+-            /* ensure backward compatibility */
+-            #if !defined(SND_LIB_SUBMINOR) && defined(SOUNDLIB_VERSION_SUBMINOR)
+-            #define SND_LIB_SUBMINOR SOUNDLIB_VERSION_SUBMINOR
+-            #endif
+-            return SND_LIB_SUBMINOR;
+-        }
+-    ]])],
+-    alsa_subminor=0,
+-    alsa_subminor=$?,
+-    alsa_subminor=0
+-    )
++        #if !defined(SND_LIB_SUBMINOR) && defined(SOUNDLIB_VERSION_SUBMINOR)
++        #define SND_LIB_SUBMINOR SOUNDLIB_VERSION_SUBMINOR
++        #endif
++    ]], [alsa_subminor=0])
++
+     AC_LANG_POP([C])
+     echo "$alsa_major.$alsa_minor.$alsa_subminor";
+     AC_DEFINE_UNQUOTED(ALSA_MAJOR,$alsa_major,[Define to the major version number of your Alsa installation.])
+-- 
+2.51.2
+
