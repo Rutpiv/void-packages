@@ -1,10 +1,11 @@
 # Template file for 'lv2'
 pkgname=lv2
 version=1.18.10
-revision=2
+revision=3
 build_style=meson
-hostmakedepends="pkg-config"
-makedepends="libsndfile-devel libsamplerate-devel"
+hostmakedepends="pkg-config doxygen python3-lxml
+	python3-Markdown python3-Pygments python3-rdflib"
+makedepends="libsndfile-devel libsamplerate-devel gtk+-devel"
 short_desc="Plugin standard for audio systems"
 maintainer="Orphaned <orphan@voidlinux.org>"
 license="ISC"
@@ -14,4 +15,38 @@ checksum=78c51bcf21b54e58bb6329accbb4dae03b2ed79b520f9a01e734bd9de530953f
 
 post_install() {
 	vlicense COPYING
+}
+
+lv2-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+	}
+}
+
+lv2-example-plugins_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - example plugins"
+	pkg_install() {
+		vmove "usr/lib/lv2/eg-*"
+	}
+}
+
+lv2-doc_package() {
+	short_desc+=" - documentation"
+	pkg_install() {
+		vmove usr/share/doc
+	}
+}
+
+lv2-specgen_package() {
+	depends="${sourcepkg}>=${version}_${revision} python3-lxml python3-Markdown
+		python3-Pygments python3-rdflib"
+	short_desc+=" - LV2 specification generator"
+	pkg_install() {
+		vmove usr/bin/lv2specgen.py
+		vmove usr/share/lv2specgen
+	}
 }
