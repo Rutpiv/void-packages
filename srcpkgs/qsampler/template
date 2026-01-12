@@ -1,0 +1,16 @@
+# Template file for 'qsampler'
+pkgname=qsampler
+version=1.0.1
+revision=1
+build_style=cmake
+hostmakedepends="pkg-config qt6-base"
+makedepends="qt6-base-devel qt6-tools-devel qt6-svg-devel liblscp-devel libgig-devel"
+depends=""
+short_desc="Qt GUI interface for LinuxSampler"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-3.0-or-later"
+homepage="https://qsampler.sourceforge.io/"
+distfiles="${SOURCEFORGE_SITE}/${pkgname}/${pkgname}-${version}.tar.gz"
+checksum=72f767544dc59ac80bcb9b3a3769d7fb67cce0dcab8bead46b14107961a5bb1a
+make_check=no # No tests available.
+
