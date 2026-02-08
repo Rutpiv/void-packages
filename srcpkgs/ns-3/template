@@ -1,0 +1,15 @@
+# Template file for 'ns-3'
+pkgname=ns-3
+version=3.46.1
+revision=1
+build_style=cmake
+configure_args="-DNS3_WARNINGS_AS_ERRORS=OFF"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Discrete-event network simulator for Internet systems"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-2.0-only"
+homepage="https://www.nsnam.org/"
+distfiles="https://gitlab.com/nsnam/ns-3-dev/-/archive/ns-${version}/ns-3-dev-ns-${version}.tar.gz"
+checksum=3cb25d4ce1fb5c8597c91ab3d14c52a9f37eff92c36c2961772966c440850171
