@@ -1,0 +1,14 @@
+# Template file for 'hotdoc'
+pkgname=hotdoc
+version=0.18.2
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-meson-python"
+makedepends=""
+depends=""
+short_desc="API and project documentation generator using Markdown"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="LGPL-2.0-or-later"
+homepage="https://hotdoc.github.io/"
+distfiles="https://github.com/hotdoc/hotdoc/archive/${version}.tar.gz"
+checksum=a60bc2488a10a59787e9120aad6a250953dd345e8b7c759488f618f7f444bd72
