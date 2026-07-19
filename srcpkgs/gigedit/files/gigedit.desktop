@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Gigedit
+GenericName=Instrument Editor
+Comment=Instrument editor for Gigasampler and DLS format files
+Exec=gigedit %F
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;
+Keywords=Gigasampler;GigaStudio;DLS;Sampler;Instrument;GIG;
+StartupWMClass=gigedit

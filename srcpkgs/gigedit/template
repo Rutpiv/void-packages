@@ -1,0 +1,33 @@
+# Template file for 'gigedit'
+# MUST BE SYNCHRONIZED WITH libgig: upstream releases them in lockstep.
+pkgname=gigedit
+version=1.2.4
+revision=1
+build_style=gnu-configure
+configure_args="--disable-static"
+hostmakedepends="automake gettext-devel glib-devel intltool libtool pkg-config"
+makedepends="gtkmm-devel libgig-devel libsndfile-devel linuxsampler-devel"
+depends="desktop-file-utils"
+short_desc="Instrument editor for Gigasampler and DLS format files"
+maintainer="Rutpiv <roger_freitas@live.com>"
+license="GPL-2.0-or-later"
+homepage="https://www.linuxsampler.org/"
+distfiles="https://download.linuxsampler.org/packages/${pkgname}-${version}.tar.bz2"
+checksum=6a4622a4b5e7f777fc90bc41c074789ac0cbbc7e373bcb0bf855bca0f05e9c32
+
+pre_configure() {
+	autoreconf -fi
+}
+
+post_install() {
+	vinstall ${FILESDIR}/gigedit.desktop 644 usr/share/applications
+	# development symlink without headers; nothing links against libgigedit
+	rm -f ${DESTDIR}/usr/lib/libgigedit.so
+}
+
+gigedit-doc_package() {
+	short_desc+=" - documentation"
+	pkg_install() {
+		vmove usr/share/doc
+	}
+}

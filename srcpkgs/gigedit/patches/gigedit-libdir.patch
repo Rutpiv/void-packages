@@ -1,0 +1,18 @@
+Install libgigedit in the global libdir instead of a private
+$libdir/gigedit directory, so no ld.so.conf entry is required.
+The linuxsampler live-editing plugin keeps its own pkglibdir
+(LINUXSAMPLER_PLUGIN_DIR from pkg-config) and is not affected.
+
+diff --git a/src/gigedit/Makefile.am b/src/gigedit/Makefile.am
+index 934ddf6..5ce979a 100644
+--- a/src/gigedit/Makefile.am
++++ b/src/gigedit/Makefile.am
+@@ -17,7 +17,7 @@ endif
+ 
+ SUBDIRS = gfx
+ 
+-pkglib_LTLIBRARIES = libgigedit.la
++lib_LTLIBRARIES = libgigedit.la
+ libgigedit_la_SOURCES = \
+ 	global.h \
+ 	Settings.cpp Settings.h \

@@ -1,0 +1,20 @@
+Do not list MacHelper.mm in the sources union. Automake selects the
+link language from the union of all listed sources including dead
+conditional branches, so the .mm file forces OBJCXXLD for
+libgigedit.la on Linux, where the libtool OBJCXX tag may not be
+configured (link fails with "specify a tag with --tag"). The MAC
+branch is never taken in void-packages builds.
+
+diff --git a/src/gigedit/Makefile.am b/src/gigedit/Makefile.am
+index 5ce979a..26d7623 100644
+--- a/src/gigedit/Makefile.am
++++ b/src/gigedit/Makefile.am
+@@ -8,7 +8,7 @@ wraplabel = wrapLabel.cc wrapLabel.hh
+ endif
+ 
+ if MAC
+-mac_src = MacHelper.h MacHelper.mm
++mac_src = MacHelper.h
+ mac_ld = -framework Foundation -framework AppKit
+ else
+ mac_src =
